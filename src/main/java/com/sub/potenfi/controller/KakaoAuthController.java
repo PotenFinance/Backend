@@ -32,7 +32,6 @@ public class KakaoAuthController {
 
     @GetMapping("/kakao/callback")
     public ResponseEntity<Map<String, Object>> kakaoCallback(@RequestParam String code) {
-    	System.out.println("##########code : "+code);
         try {
             // 1. 액세스 토큰 가져오기
             String accessToken = kakaoAuthService.getAccessToken(code);

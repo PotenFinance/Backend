@@ -84,7 +84,7 @@ public class KakaoAuthService {
 
             // 3. 카카오 서버에 사용자 정보 요청
             ResponseEntity<Map> response = restTemplate.exchange(
-                "https://kapi.kakao.com/v2/user/me",
+            	KakaoConstants.USER_INFO_URL,
                 HttpMethod.GET,
                 requestEntity,
                 Map.class
