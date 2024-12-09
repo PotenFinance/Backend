@@ -11,7 +11,7 @@ public class MonthlySummeryDTO {
     private int subscriptionYear;     // 구독 년
     private int subscriptionMonth;    // 구독 월
     
-    private List<SubscriptionDetailDTO> subscriptionDetails; // 구독 내역 목록
+    private List<UserSubscriptionInfoDTO> subscriptionDetails; // 구독 내역 목록
 
-    private AnnualSubscriptionCostDTO annualSubscriptionCost; // 연간 구독 비용 (별도의 클래스 사용)   
+    private AnnualSubscriptionCostDTO annualSubscriptionCost; // 사용자 구독 정보 (별도의 클래스 사용)   
 }
