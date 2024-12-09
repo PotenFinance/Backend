@@ -22,6 +22,7 @@ public class DashboardController {
     // 홈 화면 - 사용자는 이번달 총 구독 비용과 절약 가능 금액을 수치를 통해 한눈에 확인할 수 있다
     @GetMapping("/summary")
     public ResponseEntity<MonthlySummeryDTO> getMonthlySummary(@RequestParam String userId) {
+        // return ResponseEntity.ok(monthlySummeryService.getMonthlySummary());
         return null;
     }
 }
