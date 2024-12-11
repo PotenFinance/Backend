@@ -31,24 +31,19 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
+	//Webflux : kakao login api 
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	
-	
-	
-	
+	// DB Connection
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4' // MyBatis 의존성
+	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.3.0'// MySQL 의존성 (다른 DB를 사용하면 해당 DB 의존성으로 변경)
+
+    //임시DB
+    implementation 'com.h2database:h2:2.1.214'
+    
 }
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-}
 
 tasks.named('test') {
 	useJUnitPlatform()
