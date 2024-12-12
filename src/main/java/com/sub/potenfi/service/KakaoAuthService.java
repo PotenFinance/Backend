@@ -2,8 +2,8 @@ package com.sub.potenfi.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sub.potenfi.dao.UserDao;
-import com.sub.potenfi.dto.UserDto;
+import com.sub.potenfi.dto.UserDTO;
+import com.sub.potenfi.mapper.UserMapper;
 import com.sub.potenfi.util.KakaoConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +28,7 @@ public class KakaoAuthService {
     private String redirectUri;
 
     @Autowired
-    private UserDao userDao;
+    private UserMapper userDao;
 
     public Map<String, String> getTokens(String code) {
         try {
@@ -128,10 +128,10 @@ public class KakaoAuthService {
         String email = userInfo.getOrDefault("email", "unknown@kakao.com").toString();
         String name = ((Map<String, Object>) userInfo.get("properties")).get("nickname").toString();
 
-        UserDto userDto = new UserDto();
-        userDto.setUser_id(kakaoId);
+        UserDTO userDto = new UserDTO();
+        userDto.setUserId(kakaoId);
         userDto.setEmail(email);
-        userDto.setUser_name(name);
+        userDto.setUserName(name);
 
         if (userDao.getUserById(kakaoId) == null) {
             userDao.registerUser(userDto);

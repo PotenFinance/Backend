@@ -1,7 +1,8 @@
 package com.sub.potenfi.service;
 
-import com.sub.potenfi.dao.UserDao;
-import com.sub.potenfi.dto.UserDto;
+import com.sub.potenfi.dto.UserDTO;
+import com.sub.potenfi.mapper.UserMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +10,9 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     @Autowired
-    private UserDao userDao;
+    private UserMapper userDao;
 
-    public void registerUser(UserDto userDto) {
+    public void registerUser(UserDTO userDto) {
         userDao.registerUser(userDto); // DAO 호출
     }
     
@@ -27,11 +28,20 @@ public class UserService {
     }
 
 	public void updateUserNickname(String userId, String newNickname) {
-        UserDto user = userDao.getUserById(userId);
+        UserDTO user = userDao.getUserById(userId);
         if (user == null) {
             throw new RuntimeException("User not found: " + userId);
         }
-        user.setUser_name(newNickname);
+        user.setUserName(newNickname);
         userDao.updateUser(user);
+	}
+
+	public void updateUserName(String userId, String newUserName) {
+	    if (userId == null || userId.isEmpty()) {
+	        throw new IllegalArgumentException("User ID cannot be null or empty");
+	    }
+
+	    userDao.updateUserName(userId, newUserName);
+		
 	}
 }

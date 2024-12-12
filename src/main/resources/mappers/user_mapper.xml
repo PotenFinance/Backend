@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.sub.potenfi.dao.UserDao">
-    <insert id="registerUser" parameterType="com.sub.potenfi.dto.UserDto">
-        INSERT INTO "user" (user_id, user_name, email, user_cd, budget, audit_id, audit_dtm)
-        VALUES (#{user_id}, #{user_name}, #{email}, #{user_cd}, #{budget}, #{audit_id}, #{audit_dtm})
+<mapper namespace="com.sub.potenfi.mapper.UserMapper">
+    <insert id="registerUser" parameterType="com.sub.potenfi.dto.UserDTO">
+        INSERT INTO user (user_id, user_name, nickname, budget, user_cd, email)
+        VALUES (#{userId}, #{userName}, #{nickname}, #{budget}, #{userCd}, #{email})
     </insert>
 
-    <update id="updateUser" parameterType="com.sub.potenfi.dto.UserDto">
-        UPDATE "user"
-        SET user_name = #{user_name},
-            email = #{email},
-            user_cd = #{user_cd},
+    <update id="updateUser" parameterType="com.sub.potenfi.dto.UserDTO">
+        UPDATE user
+        SET user_name = #{userName},
+            nickname = #{nickname},
             budget = #{budget},
-            audit_id = #{audit_id},
-            audit_dtm = #{audit_dtm}
-        WHERE user_id = #{user_id}
+            user_cd = #{userCd},
+            email = #{email}
+        WHERE user_id = #{userId}
+    </update>
+    
+    <update id="updateUserName" parameterType="map">
+        UPDATE user
+        SET user_name = #{newUserName}
+        WHERE user_id = #{userId}
     </update>
 
-    <select id="getUserById" parameterType="String" resultType="com.sub.potenfi.dto.UserDto">
-        SELECT * FROM "user" WHERE user_id = #{user_id}
+    <select id="getUserById" parameterType="String" resultType="com.sub.potenfi.dto.UserDTO">
+        SELECT * FROM user WHERE user_id = #{userId}
     </select>
 
     <delete id="deleteUser" parameterType="String">
-        DELETE FROM "user" WHERE user_id = #{user_id}
+        DELETE FROM user WHERE user_id = #{userId}
     </delete>
 </mapper>
+

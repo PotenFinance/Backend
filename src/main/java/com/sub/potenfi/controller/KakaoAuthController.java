@@ -1,11 +1,13 @@
 package com.sub.potenfi.controller;
 
+import com.sub.potenfi.dto.UserDTO;
 import com.sub.potenfi.service.KakaoAuthService;
 import com.sub.potenfi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -44,6 +46,45 @@ public class KakaoAuthController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(401).body(Map.of(
                 "error", "Authentication failed",
+                "details", e.getMessage()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of(
+                "error", "Internal server error",
+                "details", e.getMessage()
+            ));
+        }
+    }
+
+    @PostMapping("/kakao/onboard")
+    public ResponseEntity<?> onboardUser(@RequestBody Map<String, Object> requestData) {
+        try {
+            // 1. 요청 데이터 파싱
+            String code = (String) requestData.get("code");
+            String userId = (String) requestData.get("userId");
+            Integer budget = (Integer) requestData.get("budget");
+            List<Map<String, Object>> platforms = (List<Map<String, Object>>) requestData.get("platforms");
+
+            // 2. 카카오 API 호출하여 새로운 토큰 발급
+            Map<String, String> tokens = kakaoAuthService.getTokens(code);
+            String accessToken = tokens.get("access_token");
+            String refreshToken = tokens.get("refresh_token");
+
+            // 3. user 테이블에 사용자 정보 저장(id와 budget만)
+            UserDTO userDto = new UserDTO();
+            userDto.setUserId(userId);
+            userDto.setBudget(budget);
+            userService.registerUser(userDto);
+
+            // 4. 응답 반환 (토큰 포함)
+            return ResponseEntity.ok(Map.of(
+                "access_token", accessToken,
+                "refresh_token", refreshToken,
+                "message", "User onboarded and authenticated successfully"
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(Map.of(
+                "error", "Onboarding failed",
                 "details", e.getMessage()
             ));
         } catch (Exception e) {

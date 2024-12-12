@@ -1,6 +1,6 @@
 package com.sub.potenfi.controller;
 
-import com.sub.potenfi.dto.UserDto;
+import com.sub.potenfi.dto.UserDTO;
 import com.sub.potenfi.service.UserService;
 
 import java.util.Map;
@@ -16,7 +16,10 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public String register(@RequestBody UserDto userDto) {
+    public String register(@RequestBody UserDTO userDto) {
+        if (userDto.getUserId() == null || userDto.getUserId().isEmpty()) {
+            throw new RuntimeException("UserId is required.");
+        }
         userService.registerUser(userDto);
         return "User registered successfully";
     }
@@ -29,5 +32,11 @@ public class UserController {
 
         userService.updateUserNickname(userId, newNickname);
         return "Nickname updated successfully";
+    }
+    
+    @PostMapping("/edit-name")
+    public String editUserProfile(@RequestParam String userId, @RequestParam String newUserName) {
+        userService.updateUserName(userId, newUserName);
+        return "UserName updated successfully";
     }
 }
