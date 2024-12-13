@@ -1,3 +1,12 @@
 kakao:
-  client_id: fb026f43b3bb840254305153927af4c2
-  redirect_uri: http://localhost:8080/auth/kakao/callback
+  clientId: fb026f43b3bb840254305153927af4c2
+  redirectUri: http://localhost:8080/auth/kakao/callback
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mappers/*.xml
+spring:
+  datasource:
+    url: jdbc:mysql://223.130.157.148:3306/subit?useSSL=false&serverTimezone=UTC
+    username: poten412
+    password: poten412!
+    driver-class-name: com.mysql.cj.jdbc.Driver

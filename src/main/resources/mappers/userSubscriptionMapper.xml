@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.sub.potenfi.mapper.UserSubscriptionMapper">
+    
+    <insert id="insertUserSubscriptions" parameterType="java.util.List">
+            INSERT INTO user_subscriptions (
+                user_id,
+                platform_id,
+                plan_id,
+                is_group,
+                is_yearly_pay,
+                billing_month,
+                billing_day,
+                actual_cost,
+                active_users,
+                platform_type
+            )
+        <foreach collection="subscriptions" item="subscription" separator=",">
+            (
+                #{subscription.userId},
+                #{subscription.platformId},
+                #{subscription.planId},
+                #{subscription.isGroup},
+                #{subscription.isYearlyPay},
+                #{subscription.billingMonth},
+                #{subscription.billingDay},
+                #{subscription.actualCost},
+                #{subscription.activeUsers},
+                #{subscription.platformType}
+            )
+        </foreach>
+    </insert>
+
+</mapper>
