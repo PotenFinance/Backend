@@ -1,10 +1,14 @@
 package com.sub.potenfi.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class AnnualSubscriptionCostDTO {
     private int year;                     // 구독 년도 (int)
     private int currentMonthCost;         // 당월 비용

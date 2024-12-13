@@ -1,29 +1,43 @@
 package com.sub.potenfi.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sub.potenfi.dto.UserDTO;
 import com.sub.potenfi.dto.UserSubscriptionInfoDTO;
 import com.sub.potenfi.dto.UserSubscriptionInfoReqDTO;
+import com.sub.potenfi.mapper.UserMapper;
 import com.sub.potenfi.mapper.UserSubscriptionMapper;
 
 @Service
 public class UserSubscriptionService {
-    
+
     @Autowired
     UserSubscriptionMapper userSubscriptionMapper;
+    UserMapper userDao;
 
     // 회원가입시 사용자 구독 정보 등록
     public void registUserSubscriptions(UserSubscriptionInfoReqDTO userSubscriptionInfoReqDTO) {
-        // userId를 UserSubscriptionInfoDTO의 각 항목에 세팅
+        String userId = userSubscriptionInfoReqDTO.getUserId();
+        int budget = userSubscriptionInfoReqDTO.getBudget();
+
+        // 고객 조회
+        UserDTO user = userDao.getUserById(userId);
+
+        if (user == null) {
+            throw new RuntimeException("User not found: " + userId);
+        }
+        
+        // update 값 세팅
+        user.setBudget(budget);
+
+        // userId -> UserSubscriptionInfoDTO 에 세팅
         List<UserSubscriptionInfoDTO> subscriptions = userSubscriptionInfoReqDTO.getPlatforms()
                 .stream()
                 .map(dto -> {
-                    // userId -> UserSubscriptionInfoDTO 에 세팅
                     return UserSubscriptionInfoDTO.builder()
                             .userId(userSubscriptionInfoReqDTO.getUserId())
                             .platformId(dto.getPlatformId())
@@ -38,7 +52,11 @@ public class UserSubscriptionService {
                             .build();
                 })
                 .collect(Collectors.toList());
+        
+        // 고객 정보 update
+        userDao.updateUser(user);
 
-                userSubscriptionMapper.insertUserSubscriptions(subscriptions);
-} 
+        // 고객 구독 정보 update
+        userSubscriptionMapper.insertUserSubscriptions(subscriptions);
+    }
 }
