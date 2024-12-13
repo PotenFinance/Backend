@@ -12,8 +12,8 @@ public class UserService {
     @Autowired
     private UserMapper userDao;
 
-    public void registerUser(UserDTO userDto) {
-        userDao.registerUser(userDto); // DAO 호출
+    public void registerUser(UserDTO userDTO) {
+        userDao.registerUser(userDTO); // DAO 호출
     }
     
     public void deleteUser(String userId) {
