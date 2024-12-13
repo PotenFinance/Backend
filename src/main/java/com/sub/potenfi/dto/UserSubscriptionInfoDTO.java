@@ -1,5 +1,16 @@
 package com.sub.potenfi.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserSubscriptionInfoDTO {
     private String platformId;          // 플랫폼 id
     private String platformCode;       // 플랫폼 코드

@@ -1,5 +1,14 @@
 package com.sub.potenfi.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class PlatformPlanInfoDTO {
     private String planId;          // 요금제 Id
     private String platformId;      // 플랫폼 Id

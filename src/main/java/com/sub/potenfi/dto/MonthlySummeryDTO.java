@@ -2,6 +2,15 @@ package com.sub.potenfi.dto;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class MonthlySummeryDTO {
     private String userName;            // 사용자 이름
     private int totalSubscriptionCost;  // 총 구독 금액

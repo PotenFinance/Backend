@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sub.potenfi.mapper.MemberMapper">
+
+    <!-- TOP5 플랫폼 조회 -->
+    <select id="selectTop5Platforms" resultType="com.sub.potenfi.dto.PlatformInfoDTO">
+        SELECT 
+            platform_id AS platformId,
+            platform_name AS platformName,
+            platform_type AS platformType,
+        FROM 
+            platforms
+        WHERE 
+            is_top = 'Y'
+        ORDER BY 
+            rank ASC
+        LIMIT 5
+    </select>
+
+</mapper>
