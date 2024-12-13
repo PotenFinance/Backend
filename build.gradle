@@ -40,9 +40,15 @@ dependencies {
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4' // MyBatis 의존성
 	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.3.0'// MySQL 의존성 (다른 DB를 사용하면 해당 DB 의존성으로 변경)
 
+<<<<<<< HEAD
     //임시DB
     implementation 'com.h2database:h2:2.1.214'
     
+=======
+	// Lombok 의존성 추가
+    compileOnly 'org.projectlombok:lombok:1.18.24'  // 컴파일 시에만 필요
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'  // Lombok 어노테이션 프로세서 추가
+>>>>>>> dev2
 }
 
 tasks.named('test') {
