@@ -11,7 +11,7 @@ import lombok.Setter;
 @Builder
 public class UserSubscriptionInfoReqDTO {
     private String userId;        
-    private String budget;        // 잔여 예산
+    private int budget;        // 잔여 예산
     private List<UserSubscriptionInfoDTO> platforms;
     
 }
