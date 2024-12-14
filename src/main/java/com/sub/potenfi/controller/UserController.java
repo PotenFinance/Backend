@@ -1,11 +1,13 @@
 package com.sub.potenfi.controller;
 
+import com.sub.potenfi.dto.UpdateBudgetRequest;
 import com.sub.potenfi.dto.UserDTO;
 import com.sub.potenfi.service.UserService;
 
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,5 +40,17 @@ public class UserController {
     public String editUserProfile(@RequestParam String userId, @RequestParam String newUserName) {
         userService.updateUserName(userId, newUserName);
         return "UserName updated successfully";
+    }
+    
+    // Budget 업데이트 API
+    @PostMapping("/update-budget")
+    public ResponseEntity<String> updateBudget(@RequestBody UpdateBudgetRequest request) {
+        try {
+            // Budget 업데이트 요청 처리
+            userService.updateBudget(request.getUserId(), request.getBudget());
+            return ResponseEntity.ok("Budget updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to update budget: " + e.getMessage());
+        }
     }
 }

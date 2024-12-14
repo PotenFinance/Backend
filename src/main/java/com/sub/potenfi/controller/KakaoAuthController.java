@@ -4,6 +4,7 @@ import com.sub.potenfi.dto.OnboardRequestDTO;
 import com.sub.potenfi.dto.UserDTO;
 import com.sub.potenfi.service.KakaoAuthService;
 import com.sub.potenfi.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -96,8 +97,6 @@ public class KakaoAuthController {
             ));
         }
     }
-
-
 
     @PostMapping("/kakao/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String accessToken) {

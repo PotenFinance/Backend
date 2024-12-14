@@ -13,8 +13,8 @@ public class OnboardRequestDTO {
         private String planId;
         private String isGroup;
         private String isYearlyPay;
-        private int billingMonth;
-        private int billingDay;
+        private String billingMonth;
+        private String billingDay;
 
         // Getters and Setters
         public String getPlatformId() {
@@ -49,21 +49,26 @@ public class OnboardRequestDTO {
             this.isYearlyPay = isYearlyPay;
         }
 
-        public int getBillingMonth() {
+        public String getBillingMonth() {
             return billingMonth;
         }
 
-        public void setBillingMonth(int billingMonth) {
+        public void setBillingMonth(String billingMonth) {
             this.billingMonth = billingMonth;
         }
 
-        public int getBillingDay() {
+        public String getBillingDay() {
             return billingDay;
         }
 
-        public void setBillingDay(int billingDay) {
+        public void setBillingDay(String billingDay) {
             this.billingDay = billingDay;
         }
+
+		public Object getActiveUsers() {
+			// TODO Auto-generated method stub
+			return null;
+		}
     }
 
     // Getters and Setters

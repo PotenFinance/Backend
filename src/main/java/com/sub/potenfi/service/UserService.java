@@ -44,4 +44,10 @@ public class UserService {
 	    userDao.updateUserName(userId, newUserName);
 		
 	}
+	
+    public void updateBudget(String userId, int budget) {
+    	userDao.updateUserBudget(userId, budget);
+    }
+    
+    
 }

@@ -37,32 +37,46 @@ public class KakaoAuthService {
 
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
             params.add("grant_type", "authorization_code");
-            params.add("client_id", clientId);
-            params.add("redirect_uri", redirectUri);
+            params.add("client_id", clientId); // 카카오 개발자 콘솔 값과 일치해야 함
+            params.add("redirect_uri", redirectUri); // 카카오 개발자 콘솔에 등록된 URI
             params.add("code", code);
+
+            System.out.println("Requesting tokens with code: " + code);
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
             ResponseEntity<String> response = restTemplate.exchange(
-                KakaoConstants.tokenUrl,
+                KakaoConstants.tokenUrl, // https://kauth.kakao.com/oauth/token
                 HttpMethod.POST,
                 request,
                 String.class
             );
+            System.out.println("54");
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                System.err.println("Token API call failed: " + response.getBody());
+                throw new RuntimeException("Failed to fetch tokens: " + response.getStatusCode());
+            }
 
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(response.getBody());
 
-            // 액세스 토큰과 리프레시 토큰 추출
-            String accessToken = rootNode.get("access_token").asText();
-            String refreshToken = rootNode.get("refresh_token").asText();
+            String accessToken = rootNode.path("access_token").asText(null);
+            String refreshToken = rootNode.path("refresh_token").asText(null);
+
+            if (accessToken == null || refreshToken == null) {
+                System.err.println("Invalid tokens in response: " + response.getBody());
+                throw new RuntimeException("Failed to fetch valid tokens");
+            }
 
             Map<String, String> tokens = new HashMap<>();
             tokens.put("access_token", accessToken);
             tokens.put("refresh_token", refreshToken);
 
             return tokens;
+
         } catch (Exception e) {
+            System.err.println("Error while fetching tokens: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Failed to get tokens", e);
         }
     }

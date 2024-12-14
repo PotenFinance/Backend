@@ -30,5 +30,12 @@
     <delete id="deleteUser" parameterType="String">
         DELETE FROM user WHERE user_id = #{userId}
     </delete>
+    
+    <update id="updateUserBudget" parameterType="map">
+        UPDATE user
+        SET budget = #{budget}
+        WHERE user_id = #{userId};
+    </update>
+
 </mapper>
 

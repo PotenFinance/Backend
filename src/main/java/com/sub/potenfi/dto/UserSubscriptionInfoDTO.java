@@ -22,4 +22,8 @@ public class UserSubscriptionInfoDTO {
     private String billingDay;       // 결제 발생일
     private int actualCost;       // 월 구독 금액(사용자가 지불하는 구독요금)
     private int activeUsers;       // 실제 구독 인원 수
+	public static UserSubscriptionInfoDTOBuilder builder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

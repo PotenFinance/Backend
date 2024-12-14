@@ -16,7 +16,7 @@ import com.sub.potenfi.mapper.UserSubscriptionMapper;
 public class UserSubscriptionService {
 
     @Autowired
-    UserSubscriptionMapper userSubscriptionMapper;
+	UserSubscriptionMapper userSubscriptionMapper;
     UserMapper userDao;
 
     // 회원가입시 사용자 구독 정보 등록
@@ -58,5 +58,22 @@ public class UserSubscriptionService {
 
         // 고객 구독 정보 update
         userSubscriptionMapper.insertUserSubscriptions(subscriptions);
+    }
+
+    
+    public void updatePlatform(String userId, String currentPlatformId, String platformId) {
+        userSubscriptionMapper.updatePlatform(userId, currentPlatformId, platformId);
+    }
+
+    public void updatePlan(String userId, String platformId, String planId) {
+        userSubscriptionMapper.updatePlan(userId, platformId, planId);
+    }
+
+    public void updateBillingDate(String userId, String platformId, int billingMonth, int billingDay) {
+        userSubscriptionMapper.updateBillingDate(userId, platformId, billingMonth, billingDay);
+    }
+
+    public void updateAdditionalFields(String userId, String platformId, boolean isGroup, boolean isYearlyPay, int actualCost, int activeUsers) {
+        userSubscriptionMapper.updateAdditionalFields(userId, platformId, isGroup, isYearlyPay, actualCost, activeUsers);
     }
 }

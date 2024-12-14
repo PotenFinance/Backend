@@ -1,7 +1,11 @@
 package com.sub.potenfi.mapper;
 
 import com.sub.potenfi.dto.UserDTO;
+
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserMapper {
@@ -15,5 +19,12 @@ public interface UserMapper {
     int deleteUser(String userId);
 
 	void updateUserName(String userId, String newUserName);
+
+	static void insertSubscription(Map<String, Object> subscription) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	void updateUserBudget(@Param("userId") String userId, @Param("budget") int budget);
 
 }
