@@ -1,5 +1,6 @@
 package com.sub.potenfi.controller;
 
+import com.sub.potenfi.dto.OnboardRequestDTO;
 import com.sub.potenfi.dto.UserDTO;
 import com.sub.potenfi.service.KakaoAuthService;
 import com.sub.potenfi.service.UserService;
@@ -57,26 +58,27 @@ public class KakaoAuthController {
     }
 
     @PostMapping("/kakao/onboard")
-    public ResponseEntity<?> onboardUser(@RequestBody Map<String, Object> requestData) {
-        try {
-            // 1. 요청 데이터 파싱
-            String code = (String) requestData.get("code");
-            String userId = (String) requestData.get("userId");
-            Integer budget = (Integer) requestData.get("budget");
-            List<Map<String, Object>> platforms = (List<Map<String, Object>>) requestData.get("platforms");
+    public ResponseEntity<?> onboardUser(@RequestBody OnboardRequestDTO request) {
+    	System.out.println("Request: " + request);
+    	try {
+            // 요청 데이터 파싱
+            String code = request.getCode();
+            String userId = request.getUserId();
+            int budget = request.getBudget();
+            List<OnboardRequestDTO.PlatformDTO> platforms = request.getPlatforms();
 
-            // 2. 카카오 API 호출하여 새로운 토큰 발급
+            // 카카오 API 호출하여 새로운 토큰 발급
             Map<String, String> tokens = kakaoAuthService.getTokens(code);
             String accessToken = tokens.get("access_token");
             String refreshToken = tokens.get("refresh_token");
 
-            // 3. user 테이블에 사용자 정보 저장(id와 budget만)
+            // user 테이블에 사용자 정보 저장
             UserDTO userDto = new UserDTO();
             userDto.setUserId(userId);
             userDto.setBudget(budget);
             userService.registerUser(userDto);
 
-            // 4. 응답 반환 (토큰 포함)
+            // 응답 반환
             return ResponseEntity.ok(Map.of(
                 "access_token", accessToken,
                 "refresh_token", refreshToken,
@@ -94,6 +96,7 @@ public class KakaoAuthController {
             ));
         }
     }
+
 
 
     @PostMapping("/kakao/logout")
