@@ -41,9 +41,29 @@ public class UserController {
     }
     
     @PostMapping("/edit-name")
-    public String editUserProfile(@RequestParam String userId, @RequestParam String newUserName) {
-        userService.updateUserName(userId, newUserName);
-        return "UserName updated successfully";
+    public ResponseEntity<Map<String, Object>> editUserProfile(@RequestParam String userId, @RequestParam String newUserName) {
+        try {
+            userService.updateUserName(userId, newUserName);
+            return ResponseEntity.ok(Map.of(
+                "status", 200,
+                "message", "UserName updated successfully"
+            ));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "status", 400,
+                "message", "Invalid request: " + e.getMessage()
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(Map.of(
+                "status", 404,
+                "message", "User not found: " + e.getMessage()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of(
+                "status", 500,
+                "message", "Internal server error: " + e.getMessage()
+            ));
+        }
     }
     
     // Budget 업데이트 API
