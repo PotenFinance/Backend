@@ -10,10 +10,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import com.sub.potenfi.dto.AnnualSubscriptionCostDTO;
 import com.sub.potenfi.common.exception.NoContentException;
-
+import com.sub.potenfi.dto.AnnualSubscriptionCostDTO;
 import com.sub.potenfi.dto.MonthlySummeryDTO;
 import com.sub.potenfi.dto.UserDTO;
 import com.sub.potenfi.dto.UserSubscriptionInfoDTO;
@@ -73,9 +71,9 @@ public class MonthlySummeryService {
 
             // 4. annualSubscriptionCost (사용자 연간 구독 비용 정보)
             AnnualSubscriptionCostDTO annualCost = calculateAnnualSubscriptionCost(userId, user.getBudget());
-            monthlySummeryDTO.setAnnualSubscriptionCost(annualCost);
+            respnseDTO.setAnnualSubscriptionCost(annualCost);
 
-            return monthlySummeryDTO;
+            return respnseDTO;
 
         } catch (Exception e) {
             throw new Exception(e.getMessage());

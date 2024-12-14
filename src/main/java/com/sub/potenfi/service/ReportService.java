@@ -1,14 +1,15 @@
 package com.sub.potenfi.service;
 
-import com.sub.potenfi.dto.ReportDTO;
-import com.sub.potenfi.mapper.ReportMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.sub.potenfi.dto.ReportDTO;
+import com.sub.potenfi.mapper.ReportMapper;
 
 @Service
 public class ReportService {

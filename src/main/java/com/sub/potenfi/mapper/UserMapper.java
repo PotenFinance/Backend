@@ -1,11 +1,11 @@
 package com.sub.potenfi.mapper;
 
-import com.sub.potenfi.dto.UserDTO;
-
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import com.sub.potenfi.dto.UserDTO;
 
 @Mapper
 public interface UserMapper {

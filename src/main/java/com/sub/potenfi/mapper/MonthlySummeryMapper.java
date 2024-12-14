@@ -10,6 +10,7 @@ import com.sub.potenfi.dto.AnnualSubscriptionCostDTO;
 import com.sub.potenfi.dto.MonthlySummeryDTO;
 import com.sub.potenfi.dto.UserSubscriptionInfoDTO;
 
+
 @Mapper
 public interface MonthlySummeryMapper {
     
