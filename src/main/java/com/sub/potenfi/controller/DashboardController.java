@@ -22,7 +22,7 @@ public class DashboardController {
     
     // 홈 화면 - 사용자는 이번달 총 구독 비용과 절약 가능 금액을 수치를 통해 한눈에 확인할 수 있다
     @GetMapping("/summary")
-    public ResponseEntity<MonthlySummeryDTO> getMonthlySummary(@RequestParam(required = true) String userId) {
+    public ResponseEntity<MonthlySummeryDTO> getMonthlySummary(@RequestParam("userId") String userId) {
         // platformIdList가 null 또는 빈 리스트인 경우 처리
         if (StringUtils.isNullOrEmpty(userId)) {
             throw new IllegalArgumentException("");
@@ -30,10 +30,13 @@ public class DashboardController {
         }
         try {
             // 유효한 userId가 있을 경우, 서비스를 통해 월간 요약 정보 가져오기
+            System.out.println("================== ***** =======================");
+            System.out.println("userId : " + userId);
+            System.out.println("================== ***** =======================");
             MonthlySummeryDTO monthlySummary = monthlySummeryService.getMonthlySummary(userId);
             
             if (monthlySummary == null) {
-                // 사용자가 존재하지 않거나, 월간 요약 정보를 찾을 수 없는 경우
+                // 월간 요약 정보를 찾을 수 없는 경우
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                      .body(null); // 404 Not Found
             }
@@ -48,6 +51,10 @@ public class DashboardController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                                  .body(null); // 400 Bad Request
         } catch (Exception e) {
+            System.out.println("================== ***** =======================");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            System.out.println("================== ***** =======================");
             // 예기치 못한 서버 오류 처리
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                  .body(null); // 500 Internal Server Error

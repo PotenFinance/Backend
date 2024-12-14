@@ -28,7 +28,7 @@ public class PlatformController {
 
     // 플랫폼 목록 조회
     @GetMapping("/search")
-    public ResponseEntity<List<PlatformInfoDTO>> getPlatformInfo(@RequestParam(required = false) String platformName) {
+    public ResponseEntity<List<PlatformInfoDTO>> getPlatformInfo(@RequestParam("platformName") String platformName) {
         // 플랫폼 이름이 제공되지 않은 경우, 모든 플랫폼 정보를 반환하도록 처리
         if (platformName == null || platformName.isEmpty()) {
             return ResponseEntity.ok(platformService.getAllPlatformList());
@@ -39,13 +39,12 @@ public class PlatformController {
     }
 
     // 플랫폼에 해당하는 요금제 조회
-    @GetMapping("/pricingPlans")
-    public ResponseEntity<List<PlatformPlanInfoDTO>> getPricingPlansByPlatform(@RequestParam(required = false) List<String> platformIdList) {
+    @GetMapping("/search-plan")
+    public ResponseEntity<List<PlatformPlanInfoDTO>> getPricingPlansByPlatform(@RequestParam("platformId") String platformId) {
         // 플랫폼에 해당하는 요금제 조회 로직 처리
-        //List<PlatformPlanInfoDTO> pricingPlans = platformService.getPricingPlansByPlatform(platformIdList);
-        //return ResponseEntity.ok(pricingPlans);
+        List<PlatformPlanInfoDTO> pricingPlans = platformService.getPricingPlansByPlatform(platformId);
+        return ResponseEntity.ok(pricingPlans);
         // return ResponseEntity.ok(platformService.getPricingPlansByPlatform(platformId));
-        return null;
     }
     
 }
