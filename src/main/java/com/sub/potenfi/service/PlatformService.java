@@ -41,7 +41,6 @@ public class PlatformService {
     // 특정 플랫폼에 해당하는 요금제 조회
     public List<PlatformPlanInfoDTO> getPricingPlansByPlatform(String platformId) {
         // 특정 플랫폼의 요금제 조회
-        // return platformMapper.selectPricingPlansByPlatform(platformId);
-        return null;
+        return platformMapper.selectPricingPlansByPlatform(platformId);
     }
 }
