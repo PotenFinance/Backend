@@ -29,9 +29,14 @@
             platform_name LIKE CONCAT('%', #{platformName} ,'%')
     </select>
 
-    <select id="selectPricingPlansByPlatform" parameterType="String">
+    <select id="selectPricingPlansByPlatform" parameterType="String" resultType="com.sub.potenfi.dto.PlatformPlanInfoDTO">
         SELECT 
-                *
+            plan_id         as planId,
+            platform_id     as platformId,
+            plan_name       as planName,
+            plan_cost        as planFee,
+            max_members     as maxMembers,
+            is_yearly_plan  as isYearlyPlan
         FROM 
             platform_plan
         WHERE

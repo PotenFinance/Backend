@@ -22,19 +22,41 @@
 
     <select id="getSubscriptionDetails" parameterType="String" resultType="com.sub.potenfi.dto.UserSubscriptionInfoDTO">
         SELECT 
-            user_id, 
-            platform_id, 
-            plan_id, 
-            is_group, 
-            is_yearly_pay, 
-            billing_month, 
-            billing_day, 
-            actual_cost, 
-            active_users
+            us.user_id          AS userId, 
+            us.platform_id      AS platformId, 
+            p.platform_name     AS platformName,
+            pp.plan_name        AS planName, 
+            us.plan_id          AS planId, 
+            us.is_group         AS isGroup, 
+            us.is_yearly_pay    AS isYearlyPay, 
+            us.billing_month    AS billingMonth, 
+            us.billing_day      AS billingDay, 
+            us.actual_cost      AS actualCost, 
+            us.active_users     AS activeUsers,
+            CASE
+                WHEN DATE(CONCAT(YEAR(CURDATE()), '-', us.billing_month, '-', us.billing_day)) &lt; CURDATE() THEN
+                    DATEDIFF(
+                        LAST_DAY(DATE(CONCAT(YEAR(CURDATE()), '-', us.billing_month, '-01'))),
+                        DATE(CONCAT(YEAR(CURDATE()), '-', us.billing_month, '-', us.billing_day))
+                    ) + 
+                    DATEDIFF(
+                        CURDATE(),
+                        DATE_ADD(LAST_DAY(DATE(CONCAT(YEAR(CURDATE()), '-', us.billing_month, '-01'))), INTERVAL 1 DAY)
+                    )
+                ELSE 
+                    DATEDIFF(
+                        DATE(CONCAT(YEAR(CURDATE()), '-', us.billing_month, '-', us.billing_day)),
+                        CURDATE()
+                    )
+            END AS renewalDaysLeft
         FROM 
-            user_subscription
+            user_subscription us
+        JOIN
+            platform p          ON p.platform_id    = us.platform_id
+        JOIN
+            platform_plan pp    ON pp.plan_id       = us.plan_id
         WHERE
-            user_id = #{userId}
+            us.user_id          = #{userId}
     </select>
     
     <select id="getMonthlyCosts" parameterType="map" resultType="int">

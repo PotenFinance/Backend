@@ -29,7 +29,7 @@
             platform_name LIKE CONCAT('%', #{platformName} ,'%')
     </select>
 
-    <select id="selectPricingPlansByPlatform" parameterType="String">
+    <select id="selectPricingPlansByPlatform" parameterType="String" resultType="com.sub.potenfi.dto.PlatformPlanInfoDTO">
         SELECT 
                 *
         FROM 
