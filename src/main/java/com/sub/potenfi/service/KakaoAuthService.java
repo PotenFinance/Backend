@@ -3,6 +3,8 @@ package com.sub.potenfi.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -17,12 +19,15 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sub.potenfi.controller.KakaoAuthController;
 import com.sub.potenfi.dto.UserDTO;
 import com.sub.potenfi.mapper.UserMapper;
 import com.sub.potenfi.util.KakaoConstants;
 
 @Service
 public class KakaoAuthService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(KakaoAuthController.class);
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -45,7 +50,12 @@ public class KakaoAuthService {
             params.add("client_id", clientId); // 카카오 개발자 콘솔 값과 일치해야 함
             params.add("redirect_uri", redirectUri); // 카카오 개발자 콘솔에 등록된 URI
             params.add("code", code);
-
+            // 로그로 요청 파라미터 출력
+            logger.info("Requesting tokens with the following parameters:");
+            logger.info("grant_type: {}", params.getFirst("grant_type"));
+            logger.info("client_id: {}", params.getFirst("client_id"));
+            logger.info("redirect_uri: {}", params.getFirst("redirect_uri"));
+            logger.info("code: {}", params.getFirst("code"));
             System.out.println("Requesting tokens with code: " + code);
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
@@ -56,7 +66,7 @@ public class KakaoAuthService {
                 request,
                 String.class
             );
-            System.out.println("54");
+
             if (!response.getStatusCode().is2xxSuccessful()) {
                 System.err.println("Token API call failed: " + response.getBody());
                 throw new RuntimeException("Failed to fetch tokens: " + response.getStatusCode());

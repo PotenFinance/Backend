@@ -17,10 +17,10 @@ public interface UserSubscriptionMapper {
     int updatePlan(@Param("userId") String userId, @Param("platformId") String platformId, @Param("planId") String planId);
 
     int updateBillingDate(@Param("userId") String userId, @Param("platformId") String platformId,
-                          @Param("billingMonth") int billingMonth, @Param("billingDay") int billingDay);
+                          @Param("billingMonth") String string, @Param("billingDay") String string2);
 
     int updateAdditionalFields(@Param("userId") String userId, @Param("platformId") String platformId,
-                               @Param("isGroup") boolean isGroup, @Param("isYearlyPay") boolean isYearlyPay,
+                               @Param("isGroup") String string, @Param("isYearlyPay") String string2,
                                @Param("actualCost") int actualCost, @Param("activeUsers") int activeUsers);
 
 }
