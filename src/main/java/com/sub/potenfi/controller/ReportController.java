@@ -1,7 +1,7 @@
 package com.sub.potenfi.controller;
 
-import com.sub.potenfi.dto.ReportDTO;
-import com.sub.potenfi.service.ReportService;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,19 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.sub.potenfi.service.ReportService;
 
 @RestController
 @RequestMapping("/api/subscriptions")

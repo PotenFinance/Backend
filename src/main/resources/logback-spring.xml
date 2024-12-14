@@ -1,0 +1,32 @@
+<configuration>
+    <!-- 콘솔에 로그 출력 설정 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 로그 레벨과 패턴 설정 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+    <!-- 로그 파일을 매일 분리하여 생성 -->
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/path/to/logs/application.log</file> <!-- 기본 로그 파일 경로 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 로그 파일이 하루마다 변경되도록 설정 -->
+            <fileNamePattern>/app/was/logs/potenfi-%d{yyyy-MM-dd}.log</fileNamePattern> <!-- 날짜 포맷을 포함한 파일 이름 -->
+            <!-- 보관할 로그 파일의 최대 개수 설정 (여기서는 7일분 보관) -->
+            <maxHistory>7</maxHistory>
+            <!-- 보관할 로그 파일의 용량이 일정 크기 이상일 경우, 새로운 파일로 롤링하도록 설정 -->
+            <totalSizeCap>10MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 특정 패키지에 대해 디버그 레벨 로그 설정 -->
+    <!-- <logger name="com.example" level="DEBUG" /> -->
+</configuration>
