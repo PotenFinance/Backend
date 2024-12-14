@@ -1,5 +1,7 @@
 package com.sub.potenfi.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,10 @@ public class PlatformService {
 
     // 플랫폼 이름을 기준으로 플랫폼 목록 조회
     public List<PlatformInfoDTO> getPlatformListByName(String platformName) {
-        return platformMapper.selectPlatformByName(platformName);
+        List<PlatformInfoDTO> returnPlatformList = platformMapper.selectPlatformByName(platformName);
+        
+        // 조회 결과가 없는 경우 빈 배열 반환
+        return (returnPlatformList.isEmpty()) ? Collections.emptyList() : returnPlatformList;
     };
 
     // 플랫폼 정보 조회
