@@ -18,7 +18,7 @@ import com.sub.potenfi.service.UserService;
 import com.sub.potenfi.service.UserSubscriptionService;
 
 @RestController
-@RequestMapping("/user-subscription")
+@RequestMapping("/api/user-subscription")
 public class UserSubscriptionController {
 
     @Autowired
