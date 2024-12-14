@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sub.potenfi.mapper.MonthlySummeryMapper">
+
+    <select id="getTotalSubscriptionInfo" parameterType="String" resultType="com.sub.potenfi.dto.MonthlySummeryDTO">
+        SELECT
+            u.budget AS userBudget,
+            SUM(us.actual_cost) AS totalSubscriptionCost,
+            COUNT(*) AS totalSubscriptions,
+            u.budget - SUM(us.actual_cost) AS remainingBudget,
+            YEAR(CURRENT_DATE()) AS subscriptionYear,
+            MONTH(CURRENT_DATE()) AS subscriptionMonth
+        FROM 
+            user_subscription us
+        JOIN 
+            user u ON us.user_id = u.user_id
+        WHERE 
+            us.user_id = #{userId}
+    </select>
+
+    <select id="getSubscriptionDetails" parameterType="String" resultType="com.sub.potenfi.dto.UserSubscriptionInfoDTO">
+        SELECT 
+            user_id, 
+            platform_id, 
+            plan_id, 
+            is_group, 
+            is_yearly_pay, 
+            billing_month, 
+            billing_day, 
+            actual_cost, 
+            active_users
+        FROM 
+            user_subscription
+        WHERE
+            user_id = #{userId}
+    </select>
+
+</mapper>
