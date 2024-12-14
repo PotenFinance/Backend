@@ -69,11 +69,11 @@ public class UserSubscriptionService {
         userSubscriptionMapper.updatePlan(userId, platformId, planId);
     }
 
-    public void updateBillingDate(String userId, String platformId, int billingMonth, int billingDay) {
-        userSubscriptionMapper.updateBillingDate(userId, platformId, billingMonth, billingDay);
+    public void updateBillingDate(String userId, String platformId, String string, String string2) {
+        userSubscriptionMapper.updateBillingDate(userId, platformId, string, string2);
     }
 
-    public void updateAdditionalFields(String userId, String platformId, boolean isGroup, boolean isYearlyPay, int actualCost, int activeUsers) {
-        userSubscriptionMapper.updateAdditionalFields(userId, platformId, isGroup, isYearlyPay, actualCost, activeUsers);
+    public void updateAdditionalFields(String userId, String platformId, String string, String string2, int actualCost, int activeUsers) {
+        userSubscriptionMapper.updateAdditionalFields(userId, platformId, string, string2, actualCost, activeUsers);
     }
 }

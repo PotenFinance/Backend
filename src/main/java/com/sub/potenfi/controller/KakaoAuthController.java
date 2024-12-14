@@ -3,6 +3,8 @@ package com.sub.potenfi.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,8 @@ import com.sub.potenfi.service.UserService;
 @RestController
 @RequestMapping("/api/auth")
 public class KakaoAuthController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(KakaoAuthController.class);
 
     @Autowired
     private KakaoAuthService kakaoAuthService;
@@ -28,29 +32,40 @@ public class KakaoAuthController {
     @Autowired
     private UserService userService;
     
+ // /api/auth/kakao/callback 메서드 수정
     @GetMapping("/kakao/callback")
     public ResponseEntity<Map<String, Object>> kakaoCallback(@RequestParam String code) {
-        try {
-            // 액세스 토큰 및 리프레시 토큰 가져오기
+    	logger.info("Received Kakao callback with code: {}", code);
+    	try {
+    		
+    		logger.debug("Fetching tokens with code: {}", code);
             Map<String, String> tokens = kakaoAuthService.getTokens(code);
+            logger.debug("Fetched tokens: {}", tokens);
+            
             String accessToken = tokens.get("access_token");
+            String refreshToken = tokens.get("refresh_token");
 
-            // 사용자 정보 가져오기, DB 저장
             Map<String, Object> userInfo = kakaoAuthService.getUserInfo(accessToken);
-            boolean isRegistered = kakaoAuthService.isUserRegistered(userInfo.get("id").toString());
 
-            // 응답값 추가
-            userInfo.put("isRegistered", isRegistered ? "Y" : "N");
-            
-            if (!isRegistered) {
-                // 등록되지 않은 경우 토큰을 null로 설정
-                tokens.put("access_token", null);
-                tokens.put("refresh_token", null);
-            }
-            
-            userInfo.putAll(tokens);
-
-            return ResponseEntity.ok(userInfo);
+            return ResponseEntity.ok(Map.of(
+                "id", userInfo.get("id"),
+                "connected_at", userInfo.get("connected_at"),
+                "properties", Map.of("nickname", userInfo.get("nickname")),
+                "kakao_account", Map.of(
+                    "profile_nickname_needs_agreement", false,
+                    "profile", Map.of(
+                        "nickname", userInfo.get("nickname"),
+                        "is_default_nickname", false
+                    ),
+                    "has_email", true,
+                    "email_needs_agreement", false,
+                    "is_email_valid", true,
+                    "is_email_verified", true,
+                    "email", userInfo.get("email"),
+                    "access_token", accessToken,
+                    "refresh_token", refreshToken
+                )
+            ));
         } catch (RuntimeException e) {
             return ResponseEntity.status(401).body(Map.of(
                 "error", "Authentication failed",
@@ -64,32 +79,35 @@ public class KakaoAuthController {
         }
     }
 
+    // /api/auth/kakao/onboard 메서드 수정
     @PostMapping("/kakao/onboard")
-    public ResponseEntity<?> onboardUser(@RequestBody OnboardRequestDTO request) {
-    	System.out.println("Request: " + request);
-    	try {
-            // 요청 데이터 파싱
-            String code = request.getCode();
-            String userId = request.getUserId();
-            int budget = request.getBudget();
-            List<OnboardRequestDTO.PlatformDTO> platforms = request.getPlatforms();
-
-            // 카카오 API 호출하여 새로운 토큰 발급
+    public ResponseEntity<Map<String, Object>> onboardUser(@RequestParam String code) {
+        try {
+            //String code = request.getCode();
             Map<String, String> tokens = kakaoAuthService.getTokens(code);
             String accessToken = tokens.get("access_token");
             String refreshToken = tokens.get("refresh_token");
 
-            // user 테이블에 사용자 정보 저장
-            UserDTO userDto = new UserDTO();
-            userDto.setUserId(userId);
-            userDto.setBudget(budget);
-            userService.registerUser(userDto);
+            Map<String, Object> userInfo = kakaoAuthService.getUserInfo(accessToken);
 
-            // 응답 반환
             return ResponseEntity.ok(Map.of(
-                "access_token", accessToken,
-                "refresh_token", refreshToken,
-                "message", "User onboarded and authenticated successfully"
+                "id", userInfo.get("id"),
+                "connected_at", userInfo.get("connected_at"),
+                "properties", Map.of("nickname", userInfo.get("nickname")),
+                "kakao_account", Map.of(
+                    "profile_nickname_needs_agreement", false,
+                    "profile", Map.of(
+                        "nickname", userInfo.get("nickname"),
+                        "is_default_nickname", false
+                    ),
+                    "has_email", true,
+                    "email_needs_agreement", false,
+                    "is_email_valid", true,
+                    "is_email_verified", true,
+                    "email", userInfo.get("email"),
+                    "access_token", accessToken,
+                    "refresh_token", refreshToken
+                )
             ));
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(Map.of(

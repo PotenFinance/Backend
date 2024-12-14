@@ -1,0 +1,6 @@
+kakao:
+  clientId: fb026f43b3bb840254305153927af4c2
+  redirectUri: http://www.potenfinance.site:8080/api/auth/kakao/callback
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mappers/*.xml

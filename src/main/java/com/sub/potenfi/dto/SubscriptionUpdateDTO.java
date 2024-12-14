@@ -4,10 +4,10 @@ public class SubscriptionUpdateDTO {
     private String currentPlatformId; // 현재 플랫폼 ID
     private String platformId; // 새로운 플랫폼 ID
     private String planId; // 새로운 요금제 ID
-    private int billingMonth; // 결제 월
-    private int billingDay; // 결제 일
-    private boolean isGroup; // 그룹 구독 여부
-    private boolean isYearlyPay; // 연간 결제 여부
+    private String billingMonth; // 결제 월
+    private String billingDay; // 결제 일
+    private String isGroup; // 그룹 구독 여부
+    private String isYearlyPay; // 연간 결제 여부
     private int actualCost; // 실제 결제 금액
     private int activeUsers; // 활성 사용자 수
     
@@ -29,28 +29,28 @@ public class SubscriptionUpdateDTO {
 	public void setPlanId(String planId) {
 		this.planId = planId;
 	}
-	public int getBillingMonth() {
+	public String getBillingMonth() {
 		return billingMonth;
 	}
-	public void setBillingMonth(int billingMonth) {
+	public void setBillingMonth(String billingMonth) {
 		this.billingMonth = billingMonth;
 	}
-	public int getBillingDay() {
+	public String getBillingDay() {
 		return billingDay;
 	}
-	public void setBillingDay(int billingDay) {
+	public void setBillingDay(String billingDay) {
 		this.billingDay = billingDay;
 	}
-	public boolean isGroup() {
+	public String isGroup() {
 		return isGroup;
 	}
-	public void setGroup(boolean isGroup) {
+	public void setGroup(String isGroup) {
 		this.isGroup = isGroup;
 	}
-	public boolean isYearlyPay() {
+	public String isYearlyPay() {
 		return isYearlyPay;
 	}
-	public void setYearlyPay(boolean isYearlyPay) {
+	public void setYearlyPay(String isYearlyPay) {
 		this.isYearlyPay = isYearlyPay;
 	}
 	public int getActualCost() {
