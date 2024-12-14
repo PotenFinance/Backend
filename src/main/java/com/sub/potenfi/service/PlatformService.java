@@ -24,7 +24,6 @@ public class PlatformService {
         if(top5Platforms.isEmpty()){
             throw new NoContentException("No pricing plans found for platform ID");
         }
-
         return platformMapper.selectTop5Platforms();
     }
 

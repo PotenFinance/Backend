@@ -1,5 +1,6 @@
 package com.sub.potenfi.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +27,8 @@ public class PlatformController {
     public ResponseEntity<?> getTop5PlatformList() {
         try {
             return ResponseEntity.ok(platformService.getTop5Platforms());
-        } catch (NoContentException e) {    // 조회결과 미존재시
-            return ResponseEntity.status(204).body(Map.of(
-                "error", "No results found.",
-                "details", e.getMessage()
-            ));
+        } catch (NoContentException e) {    // 조회결과 미존재시 빈배열 반환
+            return ResponseEntity.status(204).body(Collections.emptyList());
         }
         catch (Exception e) {      // 서버 오류
             return ResponseEntity.status(500).body(Map.of(
@@ -52,11 +50,8 @@ public class PlatformController {
                 return ResponseEntity.ok(platformService.getPlatformListByName(platformName));
             }
         } 
-        catch (NoContentException e) {    // 조회결과 미존재시
-            return ResponseEntity.status(204).body(Map.of(
-                "error", "No results found.",
-                "details", e.getMessage()
-            ));
+        catch (NoContentException e) {    // 조회결과 미존재시 빈배열 반환
+            return ResponseEntity.status(204).body(Collections.emptyList());
         }
         catch (Exception e) {      // 서버 오류
             return ResponseEntity.status(500).body(Map.of(
@@ -74,10 +69,7 @@ public class PlatformController {
             return ResponseEntity.ok(pricingPlans);
         }
         catch (NoContentException e) {    // 조회결과 미존재시
-            return ResponseEntity.status(204).body(Map.of(
-                "error", "No results found.",
-                "details", e.getMessage()
-            ));
+            return ResponseEntity.status(204).body(Collections.emptyList());
         }
         catch (Exception e) {      // 서버 오류
             return ResponseEntity.status(500).body(Map.of(
