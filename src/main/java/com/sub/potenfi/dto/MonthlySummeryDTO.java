@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class MonthlySummeryDTO {
     private String userid;            // 사용자 Id
     private String userName;            // 사용자 이름
-    private String userBudget;            // 사용자 설정 예산
+    private int userBudget;            // 사용자 설정 예산
     private int totalSubscriptionCost;  // 총 구독 금액
     private int totalSubscriptions;     // 총 구독 갯수
     private int remainingBudget;        // 잔여 예산

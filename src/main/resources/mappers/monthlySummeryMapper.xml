@@ -4,6 +4,8 @@
 
     <select id="getTotalSubscriptionInfo" parameterType="String" resultType="com.sub.potenfi.dto.MonthlySummeryDTO">
         SELECT
+            u.user_id,
+            u.user_name,
             u.budget AS userBudget,
             SUM(us.actual_cost) AS totalSubscriptionCost,
             COUNT(*) AS totalSubscriptions,
@@ -34,5 +36,26 @@
         WHERE
             user_id = #{userId}
     </select>
-
+    
+    <select id="getMonthlyCosts" parameterType="map" resultType="int">
+        SELECT COALESCE(SUM(actual_cost), 0) 
+        FROM user_subscription
+        WHERE user_id = #{userId} AND SUBSTRING(sub_start_dt, 1, 4) = #{year}
+        GROUP BY MONTH(billing_month)
+    </select>
+    
+<select id="getMonthlyCostsByMonth" parameterType="map" resultType="map">
+    SELECT 
+        MONTH(sub_start_dt) AS subscriptionMonth, 
+        COALESCE(SUM(actual_cost), 0) AS totalCost
+    FROM 
+        user_subscription
+    WHERE 
+        user_id = #{userId}
+        AND YEAR(sub_start_dt) = #{year}
+    GROUP BY 
+        MONTH(sub_start_dt)
+    ORDER BY 
+        MONTH(sub_start_dt);
+</select>
 </mapper>
