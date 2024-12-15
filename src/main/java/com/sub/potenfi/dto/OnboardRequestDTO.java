@@ -7,6 +7,7 @@ public class OnboardRequestDTO {
     private String userId;
     private int budget;
     private List<PlatformDTO> platforms;
+    private int activeUsers;
 
     public static class PlatformDTO {
         private String platformId;
@@ -103,4 +104,12 @@ public class OnboardRequestDTO {
     public void setPlatforms(List<PlatformDTO> platforms) {
         this.platforms = platforms;
     }
+
+	public int getActiveUsers() {
+		return activeUsers;
+	}
+
+	public void setActiveUsers(int activeUsers) {
+		this.activeUsers = activeUsers;
+	}
 }

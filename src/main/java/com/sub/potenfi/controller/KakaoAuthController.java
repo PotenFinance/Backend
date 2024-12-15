@@ -1,7 +1,9 @@
 package com.sub.potenfi.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
+import com.sub.potenfi.dto.KakaoCallbackResponseDTO;
+import com.sub.potenfi.dto.KakaoUserInfoDTO;
 import com.sub.potenfi.dto.OnboardRequestDTO;
 import com.sub.potenfi.dto.UserDTO;
 import com.sub.potenfi.service.KakaoAuthService;
@@ -34,50 +39,47 @@ public class KakaoAuthController {
     
  // /api/auth/kakao/callback 메서드 수정
     @GetMapping("/kakao/callback")
-    public ResponseEntity<Map<String, Object>> kakaoCallback(@RequestParam String code) {
-    	logger.info("Received Kakao callback with code: {}", code);
-    	try {
-    		
-    		logger.debug("Fetching tokens with code: {}", code);
+    public ResponseEntity<KakaoCallbackResponseDTO> kakaoCallback(@RequestParam String code) {
+        logger.info("Received Kakao callback with code: {}", code);
+
+        try {
+            // Step 1: Fetch tokens
             Map<String, String> tokens = kakaoAuthService.getTokens(code);
-            logger.debug("Fetched tokens: {}", tokens);
-            
             String accessToken = tokens.get("access_token");
             String refreshToken = tokens.get("refresh_token");
 
-            Map<String, Object> userInfo = kakaoAuthService.getUserInfo(accessToken);
+            // Step 2: Fetch user info
+            KakaoUserInfoDTO userInfo = kakaoAuthService.getUserInfo(accessToken);
 
-            return ResponseEntity.ok(Map.of(
-                "id", userInfo.get("id"),
-                "connected_at", userInfo.get("connected_at"),
-                "properties", Map.of("nickname", userInfo.get("nickname")),
-                "kakao_account", Map.of(
-                    "profile_nickname_needs_agreement", false,
-                    "profile", Map.of(
-                        "nickname", userInfo.get("nickname"),
-                        "is_default_nickname", false
-                    ),
-                    "has_email", true,
-                    "email_needs_agreement", false,
-                    "is_email_valid", true,
-                    "is_email_verified", true,
-                    "email", userInfo.get("email"),
-                    "access_token", accessToken,
-                    "refresh_token", refreshToken
-                )
-            ));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(401).body(Map.of(
-                "error", "Authentication failed",
-                "details", e.getMessage()
-            ));
+            if (userInfo == null || 
+            	    userInfo.getId() == null || 
+            	    userInfo.getId().isEmpty()) {
+            	    logger.warn("UserInfo is null or missing essential fields.");
+            	    throw new RuntimeException("Failed to fetch user info from Kakao.");
+            	}
+
+            // Step 3: Create DTO
+            KakaoCallbackResponseDTO responseDTO = new KakaoCallbackResponseDTO(
+                userInfo.getId(),
+                userInfo.getConnectedAt(),
+                userInfo.getProperties() != null ? userInfo.getProperties().getNickname() : null,
+                userInfo.getKakaoAccount() != null ? userInfo.getKakaoAccount().getEmail() : null,
+                accessToken,
+                refreshToken
+            );
+
+            return ResponseEntity.ok(responseDTO);
+
+        } catch (HttpClientErrorException e) {
+            logger.error("Error while fetching tokens: {}", e.getMessage(), e);
+            return ResponseEntity.status(400).build();
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of(
-                "error", "Internal server error",
-                "details", e.getMessage()
-            ));
+            logger.error("Unknown error: {}", e.getMessage(), e);
+            return ResponseEntity.status(500).build();
         }
     }
+
+
 
     // /api/auth/kakao/onboard 메서드 수정
     @PostMapping("/kakao/onboard")
@@ -88,25 +90,27 @@ public class KakaoAuthController {
             String accessToken = tokens.get("access_token");
             String refreshToken = tokens.get("refresh_token");
 
-            Map<String, Object> userInfo = kakaoAuthService.getUserInfo(accessToken);
+            KakaoUserInfoDTO userInfo = kakaoAuthService.getUserInfo(accessToken);
 
             return ResponseEntity.ok(Map.of(
-                "id", userInfo.get("id"),
-                "connected_at", userInfo.get("connected_at"),
-                "properties", Map.of("nickname", userInfo.get("nickname")),
-                "kakao_account", Map.of(
-                    "profile_nickname_needs_agreement", false,
-                    "profile", Map.of(
-                        "nickname", userInfo.get("nickname"),
-                        "is_default_nickname", false
+                    "id", userInfo.getId(),
+                    "connected_at", userInfo.getConnectedAt(),
+                    "properties", Map.of(
+                        "nickname", userInfo.getProperties() != null ? userInfo.getProperties().getNickname() : null
                     ),
-                    "has_email", true,
-                    "email_needs_agreement", false,
-                    "is_email_valid", true,
-                    "is_email_verified", true,
-                    "email", userInfo.get("email"),
-                    "access_token", accessToken,
-                    "refresh_token", refreshToken
+                    "kakao_account", Map.of(
+                        "profile_nickname_needs_agreement", false,
+                        "profile", Map.of(
+                            "nickname", userInfo.getProperties() != null ? userInfo.getProperties().getNickname() : null,
+                            "is_default_nickname", false
+                        ),
+                        "has_email", userInfo.getKakaoAccount() != null && userInfo.getKakaoAccount().getEmail() != null,
+                        "email_needs_agreement", false,
+                        "is_email_valid", true,
+                        "is_email_verified", true,
+                        "email", userInfo.getKakaoAccount() != null ? userInfo.getKakaoAccount().getEmail() : null,
+                        "access_token", accessToken,
+                        "refresh_token", refreshToken
                 )
             ));
         } catch (RuntimeException e) {

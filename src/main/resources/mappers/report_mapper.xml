@@ -6,17 +6,20 @@
 <mapper namespace="com.sub.potenfi.mapper.ReportMapper">
 <select id="fetchMonthlyReport" resultMap="ReportDTO">
     SELECT 
-        u.user_id AS userId,
-        us.billing_month AS billingMonth,
-        us.actual_cost AS actualCost,
-        us.platform_id AS platformId,
-        u.budget AS budget
+        u.user_id AS userId, -- 사용자 ID
+        us.billing_month AS billingMonth, -- 월별 구독 데이터
+        SUM(us.actual_cost) AS totalCost, -- 해당 월 총 비용
+        GROUP_CONCAT(DISTINCT us.platform_id) AS platformIds, -- 플랫폼 ID 목록
+        u.budget AS budget -- 사용자 예산
     FROM 
         user_subscription us
     JOIN 
         user u ON us.user_id = u.user_id
     WHERE 
-        us.user_id = #{userId}
+        us.user_id = #{userId} -- 특정 사용자 ID에 대한 데이터
+        AND YEAR(us.sub_start_dt) = YEAR(CURDATE()) -- 올해 데이터 필터링
+    GROUP BY 
+        us.billing_month, u.budget; -- 월별 데이터와 사용자 예산 그룹화
 </select>
 
 <resultMap id="ReportDTO" type="com.sub.potenfi.dto.ReportDTO">
