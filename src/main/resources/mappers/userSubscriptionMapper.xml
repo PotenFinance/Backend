@@ -43,4 +43,5 @@
             active_users = #{activeUsers}
         WHERE user_id = #{userId} AND platform_id = #{platformId};
     </update>
+    
 </mapper>

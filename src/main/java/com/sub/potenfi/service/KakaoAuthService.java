@@ -17,9 +17,12 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sub.potenfi.controller.KakaoAuthController;
+import com.sub.potenfi.dto.KakaoUserInfoDTO;
 import com.sub.potenfi.dto.UserDTO;
 import com.sub.potenfi.mapper.UserMapper;
 import com.sub.potenfi.util.KakaoConstants;
@@ -132,23 +135,25 @@ public class KakaoAuthService {
         }
     }
 
-    public Map<String, Object> getUserInfo(String accessToken) {
+    public KakaoUserInfoDTO getUserInfo(String accessToken) {
+        String url = "https://kapi.kakao.com/v2/user/me";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", "Bearer " + accessToken);
-
-            HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
-
-            ResponseEntity<Map> response = restTemplate.exchange(
-                KakaoConstants.userInfoUrl,
-                HttpMethod.GET,
-                requestEntity,
-                Map.class
+            ResponseEntity<String> response = restTemplate.exchange(
+                url, HttpMethod.GET, request, String.class
             );
 
-            return response.getBody();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to get user info", e);
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(response.getBody(), KakaoUserInfoDTO.class);
+
+        } catch (JsonProcessingException e) {
+            logger.error("Failed to parse Kakao user info JSON: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to process Kakao user info response.", e);
         }
     }
 

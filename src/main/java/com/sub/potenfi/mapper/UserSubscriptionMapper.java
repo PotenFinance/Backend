@@ -23,4 +23,5 @@ public interface UserSubscriptionMapper {
                                @Param("isGroup") String string, @Param("isYearlyPay") String string2,
                                @Param("actualCost") int actualCost, @Param("activeUsers") int activeUsers);
 
+    void saveActiveUsers(String userId, int activeUsers);
 }
